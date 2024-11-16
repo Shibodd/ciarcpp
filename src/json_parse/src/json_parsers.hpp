@@ -1,12 +1,15 @@
 #ifndef CIARCPP_PARSE_JSONPARSERS_HPP
 #define CIARCPP_PARSE_JSONPARSERS_HPP
 
+#include <algorithm>
 #include <array>
 #include <glaze/glaze.hpp>
 #include <ciarcpp/types.hpp>
+
+#include <ciarcpp/json_parse/parse.hpp>
 #include "parse_datetime.hpp"
-#include "parse_exception.hpp"
 #include "get_type_name.hpp"
+#include <iostream>
 
 using namespace ciarcpp;
 
@@ -71,9 +74,15 @@ struct from<JSON, std::optional<Zone>> {
     ctx.error = error_code::none; // not being a string is not an error.
 
     std::array<int, 4> r;
+    r.fill(-1); // fill with sentinel
     read<JSON>::op<Opts>(r, std::forward<Ctx>(ctx), std::forward<Args>(args)...);
+    std::cerr << r[0] << r[1] << r[2] << r[3] << std::endl;
     if (bool(ctx.error)) {
-      // Not an array? Error out.
+      return; // not an array
+    }
+
+    if (std::ranges::find(r, -1) != r.end()) {
+      // Shorter than required
       ctx.error = error_code::parse_error;
       return;
     }

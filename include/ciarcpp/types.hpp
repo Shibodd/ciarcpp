@@ -71,6 +71,7 @@ struct Zone {
   int top_left_y;
   int width;
   int height;
+  bool operator==(const Zone& other) const = default;
 };
 
 struct ZonedObjective {
