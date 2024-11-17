@@ -1,8 +1,8 @@
 #ifndef CIARCPP_API_HPP
 #define CIARCPP_API_HPP
 
-#include "types.hpp"
 #include <filesystem>
+#include <ciarcpp/types.hpp>
 
 namespace ciarcpp {
 
