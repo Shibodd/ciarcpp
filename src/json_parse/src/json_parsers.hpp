@@ -4,16 +4,28 @@
 #include <algorithm>
 #include <array>
 #include <glaze/glaze.hpp>
-#include <ciarcpp/types.hpp>
+#include <date/date.h>
 
+#include <ciarcpp/types.hpp>
 #include <ciarcpp/json_parse/parse.hpp>
-#include "parse_datetime.hpp"
+
 #include "get_type_name.hpp"
-#include <iostream>
 
 using namespace ciarcpp;
 
 namespace ciarcpp {
+
+static std::optional<std::chrono::system_clock::time_point> parse_datetime(const std::string& s) {
+  std::chrono::system_clock::time_point ans;
+  std::istringstream ss{s};
+
+  ss >> date::parse("%FT%TZ", ans);
+  if (ss.fail())
+    return std::nullopt;
+
+  return ans;
+}
+
 namespace parse {
 
 template <typename T>
@@ -76,7 +88,6 @@ struct from<JSON, std::optional<Zone>> {
     std::array<int, 4> r;
     r.fill(-1); // fill with sentinel
     read<JSON>::op<Opts>(r, std::forward<Ctx>(ctx), std::forward<Args>(args)...);
-    std::cerr << r[0] << r[1] << r[2] << r[3] << std::endl;
     if (bool(ctx.error)) {
       return; // not an array
     }
@@ -93,29 +104,5 @@ struct from<JSON, std::optional<Zone>> {
 };
 
 }
-
-template <>
-struct glz::meta<MelvinState> {
-  using enum MelvinState;
-  static constexpr auto value = enumerate(
-    "deployment", Deployment,
-    "charge", Charge,
-    "acquisition", Acquisition,
-    "communication", Communication,
-    "safe", Safe,
-    "transition", Transition,
-    "none", None
-  );
-};
-
-template <>
-struct glz::meta<CameraAngle> {
-  using enum CameraAngle;
-  static constexpr auto value = enumerate(
-    "narrow", Narrow,
-    "normal", Normal,
-    "wide", Wide
-  );
-};
 
 #endif // !CIARCPP_PARSE_JSONPARSERS_HPP

@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <optional>
+#include <variant>
 
 namespace ciarcpp {
 
@@ -48,7 +49,7 @@ struct Observation {
     int data_volume_received;
   } data_volume;
   int images_taken;
-  int active_time;
+  double active_time;
   int objectives_done;
   int objectives_points;
   timestamp timestamp;
@@ -103,9 +104,32 @@ struct Objectives {
   std::vector<BeaconObjective> beacon_objectives;
 };
 
+struct AddBeaconObjective {
+  int id;
+  std::string name;
+  timestamp start;
+  timestamp end;
+  double decrease_rate;
+  std::string description;
+  int beacon_height;
+  int beacon_width;
+  int attempts_made;
+};
+
+struct AddObjectives {
+  std::vector<ZonedObjective> zoned_objectives;
+  std::vector<AddBeaconObjective> beacon_objectives;
+};
+
+struct ObjectiveAdded {
+  std::vector<int> added;
+  std::vector<int> modified;
+};
+
 struct Simulation {
   bool is_network_simulation;
   int user_speed_multiplier;
+  bool operator==(const Simulation& other) const = default;
 };
 
 struct Control {
@@ -121,6 +145,30 @@ struct ControlResponse {
   CameraAngle camera_angle;
   MelvinState state;
   std::string status;
+  bool operator==(const Control& req) {
+    return req.vel_x == vel_x
+        && req.vel_y == vel_y
+        && req.camera_angle == camera_angle
+        && req.state == state;
+  }
+};
+
+struct Achievement {
+  std::string name;
+  bool done;
+  int points;
+  std::string description;
+  std::variant<bool, double, std::string> goal_parameter_threshold;
+  std::variant<bool, double, std::string> goal_parameter;
+};
+
+struct BeaconAttemptResponse {
+  std::string status;
+  int attempts_made;
+};
+
+struct Achievements {
+  std::vector<Achievement> achievements;
 };
 
 struct GenericError {

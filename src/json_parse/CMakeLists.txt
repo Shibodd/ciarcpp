@@ -11,7 +11,7 @@ FetchContent_Declare (time GIT_REPOSITORY https://github.com/HowardHinnant/date.
                            GIT_SHALLOW TRUE)
 FetchContent_MakeAvailable (time)
 
-add_library (${PROJECT_NAME}_json_parse ${CMAKE_CURRENT_LIST_DIR}/src/parse.cpp)
+add_library (${PROJECT_NAME}_json_parse ${CMAKE_CURRENT_LIST_DIR}/src/parse.cpp ${CMAKE_CURRENT_LIST_DIR}/src/serialize.cpp)
 set_property (TARGET ${PROJECT_NAME}_json_parse PROPERTY POSITION_INDEPENDENT_CODE True)
 target_link_libraries (${PROJECT_NAME}_json_parse PRIVATE glaze::glaze)
 target_include_directories (${PROJECT_NAME}_json_parse PRIVATE ${time_SOURCE_DIR}/include/) # date.hpp

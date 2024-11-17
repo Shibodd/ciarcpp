@@ -9,3 +9,5 @@ target_link_libraries (${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_json_parse)
 target_link_libraries(${PROJECT_NAME} PRIVATE cpr::cpr)
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/include)
 target_include_directories (${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/../json_parse/include)
+
+set_property (TARGET cpr PROPERTY POSITION_INDEPENDENT_CODE True)

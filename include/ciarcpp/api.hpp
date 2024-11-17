@@ -7,31 +7,25 @@
 namespace ciarcpp {
 
 namespace sync {
-  /* Returns a list of the available slots. */
-  Slots list_slots(const char* base_url);
-  bool book_slot(const char* base_url, int id, bool enabled);
-  void save_backup(const char* base_url);
-  void restore_backup(const char* base_url);
-  Objectives list_objectives(const char* base_url);
 
-  void upload_objective_image(const char* base_url, int objective_id, const std::filesystem::path& png_path);
-  void upload_daily_map(const char* base_url, const std::filesystem::path& png_path);
-  Simulation simulation(const char* base_url, const Simulation& sim);
-  ControlResponse control(const char* base_url, const Control& ctrl);
-  Observation get_observation(const char* base_url);
-  
-}; // namespace sync
-/*
-namespace async {
-  std::future<void> upload_objective_image(const char* base_url, int objective_id, const std::filesystem::path& png_path);
-  std::future<void> upload_daily_map(const char* base_url, const std::filesystem::path& png_path);
-  std::future<dto::Simulation> simulation(const char* base_url, const dto::Simulation& sim);
-  std::future<dto::ControlResponse> control(const char* base_url, const dto::Control& ctrl);
-  std::future<dto::Observation> get_observation(const char* base_url);
-  std::future<dto::Slots> list_slots(const char* base_url);
-  std::future<bool> book_slot(const char* base_url, int id, bool enabled);
-}; // namespace async
-*/
-}; // namespace ciarcpp
+Slots list_slots(const char* base_url);
+Slot book_slot(const char* base_url, int slot_id, bool enabled);
+void create_backup(const char* base_url);
+void restore_backup(const char* base_url);
+Objectives list_objectives(const char* base_url);
+ObjectiveAdded add_objective(const char* base_url, AddObjectives objectives);
+void delete_objective(const char* base_url, int id);
+Simulation configure_simulation(const char* base_url, Simulation sim);
+Achievements list_achievements(const char* base_url);
+std::basic_string<char> get_image(const char* base_url);
+void upload_objective_image(const char *base_url, int objective_id, const std::filesystem::path &png_path);
+void upload_daily_map(const char *base_url, const std::filesystem::path &png_path);
+ControlResponse control(const char* base_url, const Control& x);
+Observation get_observation(const char* base_url);
+void reset(const char* base_url);
+BeaconAttemptResponse send_beacon_position(const char* base_url, int beacon_id, int width, int height);
+
+} // namespace sync
+} // namespace ciarcpp
 
 #endif // !CIARCPP_API_HPP
