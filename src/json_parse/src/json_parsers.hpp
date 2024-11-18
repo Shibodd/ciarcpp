@@ -8,6 +8,7 @@
 
 #include <ciarcpp/types.hpp>
 #include <ciarcpp/json_parse/parse.hpp>
+#include <ciarcpp/errors/ciarcpp_internal_error.hpp>
 
 #include "get_type_name.hpp"
 
@@ -26,7 +27,7 @@ static std::optional<std::chrono::system_clock::time_point> parse_datetime(const
   return ans;
 }
 
-namespace parse {
+namespace json_parse {
 
 template <typename T>
 static inline T parse_json(const std::string& text) {
@@ -35,13 +36,13 @@ static inline T parse_json(const std::string& text) {
     return exp.value();
   else {
     std::ostringstream s;
-    s << "While parsing \"" << get_type_name<T>() << "\":\n" << glz::format_error(exp.error(), text);
-    throw JsonParseException(std::move(s).str());
+    s << "While parsing JSON for \"" << get_type_name<T>() << "\":\n" << glz::format_error(exp.error(), text);
+    throw CiarcppInternalException(std::move(s).str());
   }
 }
 
-};
-};
+}; // namespace json_parse
+}; // namespace ciarcpp
 
 namespace glz::detail {
 

@@ -7,11 +7,7 @@
   T parse_##name(const std::string& json)
 
 namespace ciarcpp {
-namespace parse {
-
-struct JsonParseException : public std::runtime_error {
-  using std::runtime_error::runtime_error;
-};
+namespace json_parse {
 
 CIARCPP_JSON_MAKE_PARSER(Objectives, objectives);
 CIARCPP_JSON_MAKE_PARSER(ObjectiveAdded, objective_added);
@@ -29,7 +25,7 @@ CIARCPP_JSON_MAKE_PARSER(std::optional<Zone>, zone);
 CIARCPP_JSON_MAKE_PARSER(MelvinState, melvin_state);
 }; // namespace for_testing
 
-}; // namespace parse
+}; // namespace json_parse
 }; // namespace ciarcpp
 
 #undef CIARCPP_JSON_MAKE_PARSER

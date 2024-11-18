@@ -1,6 +1,7 @@
 #ifndef CIARCPP_SERIALIZE_JSONSERIALIZERS_HPP
 #define CIARCPP_SERIALIZE_JSONSERIALIZERS_HPP
 
+#include <ciarcpp/errors/ciarcpp_internal_error.hpp>
 #include <ciarcpp/json_parse/serialize.hpp>
 #include <glaze/glaze.hpp>
 #include <date/date.h>
@@ -13,7 +14,7 @@ static std::string format_datetime(const std::chrono::system_clock::time_point& 
   return date::format("%FT%TZ", tp);
 }
 
-namespace serialize {
+namespace json_parse {
 
 template <typename T>
 static inline std::string serialize_json(const T& obj) {
@@ -24,11 +25,11 @@ static inline std::string serialize_json(const T& obj) {
     return exp.value();
 
   std::ostringstream s;
-  s << "While serializing \"" << get_type_name<T>() << "\":\n" << glz::format_error(exp.error());
-  throw JsonSerializeException(std::move(s).str());
+  s << "While serializing JSON for \"" << get_type_name<T>() << "\":\n" << glz::format_error(exp.error());
+  throw CiarcppInternalException(std::move(s).str());
 }
 
-}; // namespace serialize
+}; // namespace json_parse
 }; // namespace ciarcpp
 
 namespace glz::detail {

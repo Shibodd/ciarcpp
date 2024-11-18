@@ -7,16 +7,12 @@
   std::string serialize_##name(const T& x)
 
 namespace ciarcpp {
-namespace serialize {
-
-struct JsonSerializeException : public std::runtime_error {
-  using std::runtime_error::runtime_error;
-};
+namespace json_parse {
 
 CIARCPP_JSON_MAKE_SERIALIZER(AddObjectives, add_objectives);
 CIARCPP_JSON_MAKE_SERIALIZER(Control, control);
 
-}; // namespace serialize
+}; // namespace json_parse
 }; // namespace ciarcpp
 
 #undef CIARCPP_JSON_MAKE_SERIALIZER

@@ -7,7 +7,7 @@
   T parse_##name(const std::string& json) { return parse_json<T>(json); } struct suca
 
 namespace ciarcpp {
-namespace parse {
+namespace json_parse {
 
 CIARCPP_JSON_MAKE_PARSER(Objectives, objectives);
 CIARCPP_JSON_MAKE_PARSER(ObjectiveAdded, objective_added);
@@ -25,6 +25,6 @@ CIARCPP_JSON_MAKE_PARSER(std::optional<Zone>, zone);
 CIARCPP_JSON_MAKE_PARSER(MelvinState, melvin_state);
 }; // namespace for_testing
 
-}; // namespace parse
+}; // namespace json_parse
 }; // namespace ciarcpp
 
