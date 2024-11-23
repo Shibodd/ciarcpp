@@ -53,6 +53,8 @@ struct Observation {
   int objectives_done;
   int objectives_points;
   timestamp timestamp;
+
+  operator struct Control();
 };
 
 struct Slot {
@@ -137,7 +139,17 @@ struct Control {
   double vel_y;
   CameraAngle camera_angle;
   MelvinState state;
+  bool operator==(const Control& other) const = default;
 };
+
+inline Observation::operator Control() {
+  return Control {
+    .vel_x = vx,
+    .vel_y = vy,
+    .camera_angle = angle,
+    .state = state
+  };
+}
 
 struct ControlResponse {
   double vel_x;
@@ -145,11 +157,14 @@ struct ControlResponse {
   CameraAngle camera_angle;
   MelvinState state;
   std::string status;
-  bool operator==(const Control& req) {
-    return req.vel_x == vel_x
-        && req.vel_y == vel_y
-        && req.camera_angle == camera_angle
-        && req.state == state;
+
+  operator Control() {
+    return Control {
+      .vel_x = vel_x,
+      .vel_y = vel_y,
+      .camera_angle = camera_angle,
+      .state = state
+    };
   }
 };
 

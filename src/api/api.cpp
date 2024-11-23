@@ -1,3 +1,5 @@
+#include "cpr/api.h"
+#include "cpr/buffer.h"
 #include <cstring>
 
 #include <ciarcpp/api.hpp>
@@ -118,10 +120,24 @@ Achievements list_achievements(const char* base_url) {
   return json_parse::parse_achievements(response.text);
 }
 
-std::basic_string<char> get_image(const char* base_url) {
-  auto response = cpr::Get(make_url(base_url, "image"));
+std::string get_image(const char* base_url) {
+  auto response = cpr::Get(
+    make_url(base_url, "image"),
+    cpr::Header{ { "Accept", "image/png" } }
+  );
   success_or_throw(response);
-  return response.text;
+  return std::move(response.text);
+}
+
+void get_image(const char* base_url, const std::filesystem::path& path) {
+  cpr::Response response;
+
+  {
+    std::ofstream stream(path);
+    response = cpr::Download(stream, make_url(base_url, "image"), cpr::Header{ { "Accept", "image/png" } });
+  }
+
+  success_or_throw(response);
 }
 
 void upload_objective_image(const char *base_url, int objective_id, const std::filesystem::path &png_path) {
